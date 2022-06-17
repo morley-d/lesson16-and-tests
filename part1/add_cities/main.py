@@ -37,7 +37,17 @@ db.create_all()
 
 # TODO напишите здесь код с запросом на добавление
 # строк в таблицу
-#
+
+rome = City(id=1, name="Рим", country_ru="Италия", population=28730000)
+milan = City(id=2, name="Милан", country_ru="Италия", population=1333000)
+venez = City(id=3, name="Венеция", country_ru="Италия", population=265000)
+stamb = City(id=4, name="Стамбул", country_ru="Турция", population=108950000)
+kemer = City(id=5, name="Кемер", country_ru="Турция", population=22421)
+
+sityes = [rome, milan, venez, stamb, kemer]
+db.session.add_all(sityes)
+db.session.commit()
+
 # Не удаляйте код ниже, он нужен для корректного отображения
 # созданной вами модели при запуске файла
 
