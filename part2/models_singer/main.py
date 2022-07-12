@@ -21,6 +21,10 @@ db = SQLAlchemy(app)
 class Singer(db.Model):
     __tablename__ = 'singer'
     # TODO напишите поля для модели Singer
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, unique=True)
+    age = db.Column(db.Integer, db.CheckConstraint("age < 35"))
+    group = db.Column(db.Text, nullable=False)
 
 
 db.drop_all()

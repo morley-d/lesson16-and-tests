@@ -43,8 +43,9 @@
     # чтобы при получении запроса типа /guides?tours_count=1
     # возвращались гиды с нужным количеством туров.
 """
+import json
 
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from guides_sql import CREATE_TABLE, INSERT_VALUES
@@ -72,6 +73,70 @@ class Guide(db.Model):
 
 # TODO напишите роуты здесь
 
+@app.route("/guides")
+def get_all_guides():
+    response = Guide.query.all()
+    guides = []
+    for guide in response:
+        guides.append({
+            "id": guide.id,
+            "surname": guide.surname,
+            "full_name": guide.full_name,
+            "tours_count": guide.tours_count,
+            "bio": guide.bio,
+            "is_pro": guide.is_pro,
+            "company": guide.company
+        })
+    return jsonify(guides)
+
+
+@app.route("/guides/<int:gid>", methods=['GET'])
+def get_one(gid):
+    guide = Guide.query.get(gid)
+    result = {
+        "id": guide.id,
+        "surname": guide.surname,
+        "full_name": guide.full_name,
+        "tours_count": guide.tours_count,
+        "bio": guide.bio,
+        "is_pro": guide.is_pro,
+        "company": guide.company
+    }
+    return jsonify(result)
+
+
+@app.route("/guides/<int:gid>/delete", methods=['GET'])
+def delete_guide(gid):
+    guide = Guide.query.get(gid)
+    db.session.delete(guide)
+    db.session.commit()
+    return jsonify("")
+
+
+@app.route("/guides", methods=['POST'])
+def create_guide():
+    data = request.json
+    guide = Guide(
+        surname=data.get('surname'),
+        full_name=data.get('full_name'),
+        tours_count=data.get('tours_count'),
+        bio=data.get('bio'),
+        is_pro=data.get('is_pro'),
+        company=data.get('company')
+    )
+    db.session.add(guide)
+    db.session.commit()
+    result = {
+        "id": guide.id,
+        "surname": guide.surname,
+        "full_name": guide.full_name,
+        "tours_count": guide.tours_count,
+        "bio": guide.bio,
+        "is_pro": guide.is_pro,
+        "company": guide.company
+    }
+    return jsonify(result)
+
 
 if __name__ == "__main__":
-    app.run()
+    app.run(port=5009)

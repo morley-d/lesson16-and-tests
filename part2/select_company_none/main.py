@@ -30,7 +30,8 @@ class Guide(db.Model):
 
 def do_request():
     # TODO напишите запрос здесь
-    pass
+    guides_no_company = Guide.query.filter(Guide.company == None).all()
+    return guides_no_company
 
 
 # не удаляйте код ниже, он необходим
