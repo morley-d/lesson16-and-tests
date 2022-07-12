@@ -10,6 +10,8 @@
 # Response: { <guide_json> }
 #
 #
+
+#
 from flask import Flask, jsonify
 from sqlalchemy import text
 from flask_sqlalchemy import SQLAlchemy
